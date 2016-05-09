@@ -7,7 +7,7 @@
 
       <div class="item item-avatar">
         <h2>{{wotd.word}}</h2>
-        <p>{{wotd.pronunciation}} <i class="icon ion-volume-high" ng-click="play();" style="margin-left:10px;"></i></p>
+        <p>{{wotd.pronunciation}} <i class="icon ion-volume-high" on-tap="play();" ng-click="play();" style="margin-left:10px;"></i></p>
         <p ng-if="wotd.note">{{wotd.note}}</p>
       </div>
 

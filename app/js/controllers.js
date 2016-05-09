@@ -1,6 +1,6 @@
-angular.module('word.controllers', ['angular-storage'])
+angular.module('word.controllers', ['angular-storage', 'ngTouch', 'ionic-material'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, ionicMaterialInk) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -39,6 +39,7 @@ angular.module('word.controllers', ['angular-storage'])
         $scope.closeLogin();
       }, 1000);
     };
+    ionicMaterialInk.displayEffect();
   })
 
   .controller('PlaylistsCtrl', function ($scope) {
@@ -57,7 +58,10 @@ angular.module('word.controllers', ['angular-storage'])
   .controller('HistoryCtrl', function ($scope, $stateParams, store) {
     $scope.words = store.get("words");
   })
-  .controller('HomeCtrl', function ($scope, $stateParams, $http, store) {
+  .controller('HomeCtrl', function ($scope, $stateParams, $http, $timeout, store, ionicMaterialInk) {
+    $timeout(function () {
+      ionicMaterialInk.displayEffect();
+    }, 0);
     $scope.wotd = {};
     var wordOfTheDayAPIEndPoint = 'http://api.wordnik.com/v4/words.json/wordOfTheDay?&api_key=d010da7a2a6504b98200702b9f6027c247adee8dad74a9737';
     var pronounciationAPIEndPoint = 'http://api.wordnik.com/v4/word.json/{word}/pronunciations?useCanonical=false&limit=5&api_key=d010da7a2a6504b98200702b9f6027c247adee8dad74a9737';
