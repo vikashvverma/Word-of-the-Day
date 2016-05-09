@@ -55,21 +55,36 @@ angular.module('word.controllers', ['angular-storage', 'ngTouch', 'ionic-materia
 
   .controller('PlaylistCtrl', function ($scope, $stateParams) {
   })
-  .controller('HistoryCtrl', function ($scope, $stateParams, store) {
+  .controller('HistoryCtrl', function ($scope, $stateParams, $timeout , store, ionicMaterialInk) {
     $scope.words = store.get("words");
+    $timeout(function () {
+      ionicMaterialInk.displayEffect();
+    }, 0);
   })
-  .controller('HomeCtrl', function ($scope, $stateParams, $http, $timeout, store, ionicMaterialInk) {
+  .controller('HomeCtrl', function ($rootScope, $scope, $stateParams, $http, $timeout, store, ionicMaterialInk) {
     $timeout(function () {
       ionicMaterialInk.displayEffect();
     }, 0);
     $scope.wotd = {};
+    var wordOfTheDayAPIEndPointByDate = 'http://api.wordnik.com:80/v4/words.json/wordOfTheDay?date={date}&api_key=d010da7a2a6504b98200702b9f6027c247adee8dad74a9737';
     var wordOfTheDayAPIEndPoint = 'http://api.wordnik.com/v4/words.json/wordOfTheDay?&api_key=d010da7a2a6504b98200702b9f6027c247adee8dad74a9737';
     var pronounciationAPIEndPoint = 'http://api.wordnik.com/v4/word.json/{word}/pronunciations?useCanonical=false&limit=5&api_key=d010da7a2a6504b98200702b9f6027c247adee8dad74a9737';
     var audioAPIEndPoint = 'http://api.wordnik.com/v4/word.json/{word}/audio?useCanonical=false&limit=5&api_key=d010da7a2a6504b98200702b9f6027c247adee8dad74a9737';
+
     wordOfTheDay(wordOfTheDayAPIEndPoint);
-    $scope.play = function () {
-      $scope.audio.play();
+
+    $rootScope.random = function () {
+      var d = randomDate(new Date(2009, 08, 10), new Date())
+      wordOfTheDay(wordOfTheDayAPIEndPointByDate.replace("{date}", d.getFullYear() + "-" + d.getMonth() + "-" + d.getDay()));
     };
+
+    $scope.play = function () {
+      try {
+        $scope.audio ? $scope.audio.play() : undefined;
+      } catch (e) {
+      }
+    };
+
     function wordOfTheDay(url) {
       return $http.get(url)
         .success(function (data) {
@@ -77,43 +92,50 @@ angular.module('word.controllers', ['angular-storage', 'ngTouch', 'ionic-materia
           pronunciation(pronounciationAPIEndPoint.replace('{word}', $scope.wotd.word));
           audio(audioAPIEndPoint.replace('{word}', $scope.wotd.word));
           console.log($scope.wotd);
-          save($scope.wotd);
+          save(store, $scope.wotd);
         }).error(function (err) {
 
         });
     };
+
     function pronunciation(url) {
       return $http.get(url)
         .success(function (data) {
-          $scope.wotd.pronunciation = data[0].raw;
+          $scope.wotd.pronunciation = data && data[0] && data[0].raw;
           console.log($scope.wotd);
-          save($scope.wotd);
+          save(store, $scope.wotd);
         }).error(function (err) {
         });
     };
     function audio(url) {
       return $http.get(url)
         .success(function (data) {
-          $scope.wotd.audio = data[0].fileUrl;
+          $scope.wotd.audio = data && data[0] && data[0].fileUrl;
           $scope.audio = new Audio($scope.wotd.audio);
           console.log($scope.wotd);
-          save($scope.wotd);
+          save(store, $scope.wotd);
+
         }).error(function (err) {
         });
     };
-    function save(wotd) {
-      var words = store.get("words") || [];
-      var index = -1;
-      for (var i = 0; i < words.length; i++) {
-        if (words[i].id === wotd.id) {
-          index = i;
-          break;
-        }
-      }
-      if (index >= 0) {
-        words.splice(index, 1);
-      }
-      words.push(wotd);
-      store.set("words", words);
-    }
   });
+function save(store, wotd) {
+  var words = store.get("words") || [];
+  var index = -1;
+  for (var i = 0; i < words.length; i++) {
+    if (words[i].id === wotd.id) {
+      index = i;
+      break;
+    }
+  }
+  if (index >= 0) {
+    words.splice(index, 1);
+  }
+  words.push(wotd);
+  store.set("words", words);
+}
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+randomDate(new Date(2009, 08, 10), new Date());

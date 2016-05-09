@@ -5,7 +5,7 @@
     </div>
     <div class="list card" ng-if="wotd.word">
 
-      <div class="item item-avatar">
+      <div class="item item-text-wrap">
         <h2>{{wotd.word}}</h2>
         <p>{{wotd.pronunciation}} <i class="icon ion-volume-high" on-tap="play();" ng-click="play();" style="margin-left:10px;"></i></p>
         <p ng-if="wotd.note">{{wotd.note}}</p>

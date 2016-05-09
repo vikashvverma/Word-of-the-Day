@@ -1,8 +1,7 @@
-<ion-view view-title="Browse">
+<ion-view view-title="History">
   <ion-content>
-    <h1>History</h1>
-    <div ng-repeat="word in words">
-      <p>{{word.word}}</p>
+    <div class="list">
+      <a class="item" ng-repeat="word in words track by $index"> {{word.word}} </a>
     </div>
   </ion-content>
 </ion-view>
