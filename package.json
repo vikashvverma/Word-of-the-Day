@@ -57,5 +57,8 @@
     "org.apache.cordova.console",
     "com.ionic.keyboard",
     "cordova-plugin-whitelist"
+  ],
+  "cordovaPlatforms": [
+    "android"
   ]
 }

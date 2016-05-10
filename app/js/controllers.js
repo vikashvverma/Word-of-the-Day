@@ -55,11 +55,23 @@ angular.module('word.controllers', ['angular-storage', 'ngTouch', 'ionic-materia
 
   .controller('PlaylistCtrl', function ($scope, $stateParams) {
   })
-  .controller('HistoryCtrl', function ($scope, $stateParams, $timeout, store, ionicMaterialInk) {
+  .controller('HistoryCtrl', function ($scope, $stateParams, $timeout, $ionicHistory, store, ionicMaterialInk) {
     $scope.words = store.get("words");
     $timeout(function () {
       ionicMaterialInk.displayEffect();
     }, 0);
+    $scope.remove = function ($event, id) {
+      $event.stopPropagation();
+      for (var i = 0; i < $scope.words.length; i++) {
+        if ($scope.words[i].id == id) {
+          index = i;
+          $scope.words.splice(i, 1);
+          break;
+        }
+      }
+      store.set("words", $scope.words);
+      $ionicHistory.goBack(-1);
+    }
   })
   .controller('WordCtrl', function ($scope, $stateParams, $timeout, store, ionicMaterialInk) {
     var words = store.get("words");

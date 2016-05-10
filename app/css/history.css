@@ -1,0 +1,6 @@
+.list .item {
+  border-color: #ddd !important;
+  border-width: 1px !important;
+  border-top-style: solid;
+  border-bottom-style: solid;
+}
