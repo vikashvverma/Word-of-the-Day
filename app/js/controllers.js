@@ -61,6 +61,18 @@ angular.module('word.controllers', ['angular-storage', 'ngTouch', 'ionic-materia
       ionicMaterialInk.displayEffect();
     }, 0);
   })
+  .controller('WordCtrl', function ($scope, $stateParams, $timeout, store, ionicMaterialInk) {
+    var words = store.get("words");
+    var id = $stateParams.id;
+    $scope.wotd = words.filter(function (word) {
+      return word.id == id;
+    })[0];
+    $scope.audio = $scope.wotd.audio ? new Audio($scope.wotd.audio) : undefined;
+    $scope.play = function () {
+      $scope.audio ? $scope.audio.play() : undefined;
+    };
+    ionicMaterialInk.displayEffect();
+  })
   .controller('HomeCtrl', function ($rootScope, $scope, $stateParams, $http, $timeout, store, ionicMaterialInk) {
     $timeout(function () {
       ionicMaterialInk.displayEffect();

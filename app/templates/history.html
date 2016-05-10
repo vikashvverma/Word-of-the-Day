@@ -1,7 +1,7 @@
 <ion-view view-title="History">
   <ion-content>
     <div class="list">
-      <a class="item" ng-repeat="word in words track by $index"> {{word.word}} </a>
+      <a class="item" ng-repeat="word in words track by $index" href="#/app/history/{{word.id}}"> {{word.word}} </a>
     </div>
   </ion-content>
 </ion-view>

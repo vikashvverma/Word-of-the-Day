@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('quote', ['ionic', 'word.controllers', 'angular-storage','ngTouch','ionic-material'])
+angular.module('quote', ['ionic', 'word.controllers', 'angular-storage', 'ngTouch', 'ionic-material'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -48,6 +48,15 @@ angular.module('quote', ['ionic', 'word.controllers', 'angular-storage','ngTouch
           'menuContent': {
             templateUrl: 'templates/history.html',
             controller: 'HistoryCtrl'
+          }
+        }
+      })
+      .state('app.word', {
+        url: '/history/:id',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/word.html',
+            controller: 'WordCtrl'
           }
         }
       })
