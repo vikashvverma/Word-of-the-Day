@@ -55,7 +55,7 @@ angular.module('word.controllers', ['angular-storage', 'ngTouch', 'ionic-materia
 
   .controller('PlaylistCtrl', function ($scope, $stateParams) {
   })
-  .controller('HistoryCtrl', function ($scope, $stateParams, $timeout , store, ionicMaterialInk) {
+  .controller('HistoryCtrl', function ($scope, $stateParams, $timeout, store, ionicMaterialInk) {
     $scope.words = store.get("words");
     $timeout(function () {
       ionicMaterialInk.displayEffect();
@@ -96,7 +96,7 @@ angular.module('word.controllers', ['angular-storage', 'ngTouch', 'ionic-materia
         }).error(function (err) {
 
         });
-    };
+    }
 
     function pronunciation(url) {
       return $http.get(url)
@@ -106,18 +106,20 @@ angular.module('word.controllers', ['angular-storage', 'ngTouch', 'ionic-materia
           save(store, $scope.wotd);
         }).error(function (err) {
         });
-    };
+    }
+
     function audio(url) {
       return $http.get(url)
         .success(function (data) {
-          $scope.wotd.audio = data && data[0] && data[0].fileUrl;
-          $scope.audio = new Audio($scope.wotd.audio);
+          var audio = data && data[0] && data[0].fileUrl;
+          $scope.wotd.audio = audio;
+          $scope.audio = audio;
           console.log($scope.wotd);
           save(store, $scope.wotd);
 
         }).error(function (err) {
         });
-    };
+    }
   });
 function save(store, wotd) {
   var words = store.get("words") || [];
@@ -137,5 +139,3 @@ function save(store, wotd) {
 function randomDate(start, end) {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 }
-
-randomDate(new Date(2009, 08, 10), new Date());
