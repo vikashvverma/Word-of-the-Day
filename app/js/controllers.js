@@ -113,7 +113,7 @@ angular.module('word.controllers', ['angular-storage', 'ngTouch', 'ionic-materia
         .success(function (data) {
           var audio = data && data[0] && data[0].fileUrl;
           $scope.wotd.audio = audio;
-          $scope.audio = audio;
+          $scope.audio = new Audio(audio);
           console.log($scope.wotd);
           save(store, $scope.wotd);
 
@@ -133,7 +133,7 @@ function save(store, wotd) {
   if (index >= 0) {
     words.splice(index, 1);
   }
-  words.push(wotd);
+  words.unshift(wotd);
   store.set("words", words);
 }
 function randomDate(start, end) {
